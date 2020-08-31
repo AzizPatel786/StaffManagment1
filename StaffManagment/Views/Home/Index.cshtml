@@ -1,0 +1,42 @@
+﻿@model IEnumerable<Staff>
+@using Microsoft.AspNetCore.Identity  
+@inject SignInManager<ApplicationUser> SignInManager
+
+
+@{
+    ViewBag.Title = "Staff List";
+
+}
+    <img src="~/images/Avondale_College_D_Block (1).jpg" />
+<div class="card-deck">
+    @foreach (var staff in Model)
+    {
+        var photoPath = "~/images/" + (staff.PhotoPath ?? "avatar-512.png");
+
+        <div class="card m-3" style="min-width: 18rem; max-width:30.5%;">
+            <div class="card-header">
+                <h3>@staff.Name</h3>
+            </div>
+            <img class="card-img-top imageThumbnail" src="@photoPath"
+                 asp-append-version="true" />
+            <div class="card-footer text-center">
+                <a href="/home/details/@staff.Id" class="btn btn-primary m-1">View</a>
+                @if (User.IsInRole("Admin"))
+                {
+                    <a asp-controller="home" asp-action="edit" asp-route-id="@staff.Id"
+                       class="btn btn-primary m-1">Edit</a>
+                    <a asp-action="Delete" asp-controller="Home" asp-route-id="@staff.Id" class="btnDelete btn btn-danger">Delete</a>
+                }
+            </div>
+        </div>
+    }
+</div>
+
+@*<span id="confirmDeleteSpan_@staff.Id" style="display:none">
+        <span>Are you sure you want to delete?</span>
+        <button type="submit" class="btn btn-danger">Yes</button>
+        <a href="#" class="btn btn-primary"
+           onclick="confirmDelete('@staff.Id', false)">No</a>
+    </span>*@
+
+
