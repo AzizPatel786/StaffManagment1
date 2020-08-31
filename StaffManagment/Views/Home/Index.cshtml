@@ -7,8 +7,14 @@
     ViewBag.Title = "Staff List";
 
 }
-    <img src="~/images/Avondale_College_D_Block (1).jpg" />
-<div class="card-deck">
+    <style>
+        body {
+            background-image: url('images/avondale_college_d_block (1).jpg');
+            background-repeat: no-repeat;
+            background-attachment: fixed;
+            background-size: cover;
+        }
+    </style><div class="card-deck">
     @foreach (var staff in Model)
     {
         var photoPath = "~/images/" + (staff.PhotoPath ?? "avatar-512.png");
