@@ -47,7 +47,7 @@ namespace StaffManagment.Controllers
         {
             await signInManager.SignOutAsync();
             return RedirectToAction("index", "home");
-        }
+        }//Logout Function, it will redirect to the home page
 
 
 
