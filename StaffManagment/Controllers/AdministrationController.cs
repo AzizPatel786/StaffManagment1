@@ -36,7 +36,7 @@ namespace StaffManagment.Controllers
             if (user == null)
             {
                 ViewBag.ErrorMessage = $"User with Id = {userId} cannot be found";
-                return View("NotFound");
+                return View("NotFound"); //error page if staff is not found
             }
 
             // UserManager service GetClaimsAsync method gets all the current claims of the user
@@ -175,7 +175,7 @@ namespace StaffManagment.Controllers
         }
 
         [HttpPost]
-        [Authorize(Policy = "DeleteUserPolicy")]
+        //[Authorize(Policy = "DeleteUserPolicy")]
         public async Task<IActionResult> DeleteUser(string id)
         {
             var user = await userManager.FindByIdAsync(id);

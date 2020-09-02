@@ -128,7 +128,7 @@ namespace StaffManagment.Controllers
         {
             //model.ExternalLogins =(await signInManager.GetExternalAuthenticationSchemesAsync()).ToList();
 
-            if (ModelState.IsValid)
+            if (ModelState.IsValid) //this part checks if the email is confirmed or not
             {
                 var user = await userManager.FindByEmailAsync(model.Email);
 
@@ -142,7 +142,7 @@ namespace StaffManagment.Controllers
                 var result = await signInManager.PasswordSignInAsync(model.Email,
                                         model.Password, model.RememberMe, false);
 
-                if (result.Succeeded)
+                if (result.Succeeded)  // if the login is successful then it will redirect to homepage
                 {
                     if (!string.IsNullOrEmpty(returnUrl) && Url.IsLocalUrl(returnUrl))
                     {
@@ -159,7 +159,7 @@ namespace StaffManagment.Controllers
 
             return View(model);
         }
-        [HttpGet]
+        [HttpGet]  //if you do not meet the requirements for the action
         public IActionResult AccessDenied()
         {
             return View();
