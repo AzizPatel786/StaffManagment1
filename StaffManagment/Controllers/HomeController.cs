@@ -84,6 +84,56 @@ namespace StaffManagment.Controllers
             return View(staffEditViewModel);
         }
 
+        [HttpPost]
+        public IActionResult Edit(StaffEditViewModel model)
+        {
+            if (ModelState.IsValid)
+            {
+                Staff staff = _staffRepository.GetStaff(model.Id);
+                staff.Name = model.Name;
+                staff.Email = model.Email;
+                staff.Department = model.Department;
+                staff.Subjects = model.Subjects;
+                staff.Occupation = model.Occupation;
+                if (model.Photo != null)
+                {
+                    staff.PhotoPath = ProcessUploadedFile(model);
+                }
+
+
+                Staff newStaff = new Staff
+                {
+                    Name = model.Name,
+                    Email = model.Email,
+                    Department = model.Department,
+                    Subjects = model.Subjects,
+                    Occupation = model.Occupation,
+                    PhotoPath = uniqueFileName
+                };
+
+                _staffRepository.Update(staff);
+                return RedirectToAction("details", new { id = newStaff.Id });
+            }
+
+            return View();
+        }
+
+        private string ProcessUploadedFile(StaffCreateViewModel model)
+        {
+            string uniqueFileName = null;
+
+            if (model.Photo != null)
+            {
+                string uploadsFolder = Path.Combine(webHostEnvironment.WebRootPath, "images");
+                uniqueFileName = Guid.NewGuid().ToString() + "_" + model.Photo.FileName;
+                string filePath = Path.Combine(uploadsFolder, uniqueFileName);
+                model.Photo.CopyTo(new FileStream(filePath, FileMode.Create));
+                
+            }
+
+            return uniqueFileName;
+        }
+
         //[HttpGet]
         //public IActionResult Delete(int id)
         //{
@@ -128,74 +178,77 @@ namespace StaffManagment.Controllers
 
         // Through model binding, the action method parameter
         // EmployeeEditViewModel receives the posted edit form data
-        [HttpPost]
-        [Route("[action]")]
-
-        public IActionResult Edit(StaffEditViewModel model)
-        {
-            // Check if the provided data is valid, if not rerender the edit view
-            // so the user can correct and resubmit the edit form
-            if (ModelState.IsValid)
-            {
-                // Retrieve the employee being edited from the database
-                Staff staff = _staffRepository.GetStaff(model.Id);
-                // Update the employee object with the data in the model object
-                staff.Name = model.Name;
-                staff.Email = model.Email;
-                staff.Department = model.Department;
-                staff.Subjects = model.Subjects;
-                staff.Occupation = model.Occupation;
-
-                // If the user wants to change the photo, a new photo will be
-                // uploaded and the Photo property on the model object receives
-                // the uploaded photo. If the Photo property is null, user did
-                // not upload a new photo and keeps his existing photo
-                if (model.Photo != null)
-                {
-                    // If a new photo is uploaded, the existing photo must be
-                    // deleted. So check if there is an existing photo and delete
-                    if (model.ExistingPhotoPath != null)
-                    {
-                        string filePath = Path.Combine(webHostEnvironment.WebRootPath,
-                            "images", model.ExistingPhotoPath);
-                        System.IO.File.Delete(filePath);
-                    }
-                    // Save the new photo in wwwroot/images folder and update
-                    // PhotoPath property of the employee object which will be
-                    // eventually saved in the database
-                    staff.PhotoPath = ProcessUploadedFile(model);
-                }
-
-                // Call update method on the repository service passing it the
-                // employee object to update the data in the database table
-                Staff updatedStaff = _staffRepository.Update(staff);
-
-                return RedirectToAction("index");
-            }
-
-            return View(model);
-        }
 
 
-        private string ProcessUploadedFile(StaffCreateViewModel model)
-        {
-            string uniqueFileName = null;
 
-            if (model.Photo != null)
-            {
+        //[HttpPost]
+        //[Route("[action]")]
 
-                string uploadsFolder = Path.Combine(webHostEnvironment.WebRootPath, "images");
+        //public IActionResult Edit(StaffEditViewModel model)
+        //{
+        //    // Check if the provided data is valid, if not rerender the edit view
+        //    // so the user can correct and resubmit the edit form
+        //    if (ModelState.IsValid)
+        //    {
+        //        // Retrieve the employee being edited from the database
+        //        Staff staff = _staffRepository.GetStaff(model.Id);
+        //        // Update the employee object with the data in the model object
+        //        staff.Name = model.Name;
+        //        staff.Email = model.Email;
+        //        staff.Department = model.Department;
+        //        staff.Subjects = model.Subjects;
+        //        staff.Occupation = model.Occupation;
 
-                uniqueFileName = Guid.NewGuid().ToString() + "_" + Path.GetFileName(model.Photo.FileName);
-                string filePath = Path.Combine(uploadsFolder, uniqueFileName);
-                using (var fileStream = new FileStream(filePath, FileMode.Create)) 
-                {
-                    model.Photo.CopyTo(fileStream);
-                }
-            }
+        //        // If the user wants to change the photo, a new photo will be
+        //        // uploaded and the Photo property on the model object receives
+        //        // the uploaded photo. If the Photo property is null, user did
+        //        // not upload a new photo and keeps his existing photo
+        //        if (model.Photo != null)
+        //        {
+        //            // If a new photo is uploaded, the existing photo must be
+        //            // deleted. So check if there is an existing photo and delete
+        //            if (model.ExistingPhotoPath != null)
+        //            {
+        //                string filePath = Path.Combine(webHostEnvironment.WebRootPath,
+        //                    "images", model.ExistingPhotoPath);
+        //                System.IO.File.Delete(filePath);
+        //            }
+        //            // Save the new photo in wwwroot/images folder and update
+        //            // PhotoPath property of the employee object which will be
+        //            // eventually saved in the database
+        //            staff.PhotoPath = ProcessUploadedFile(model);
+        //        }
 
-            return uniqueFileName;
-        }
+        //        // Call update method on the repository service passing it the
+        //        // employee object to update the data in the database table
+        //        /*Staff updatedStaff*//* =*/ _staffRepository.Update(staff);
+
+        //        return RedirectToAction("index");
+        //    }
+
+        //    return View(model);
+        //}
+
+
+        //private string ProcessUploadedFile(StaffCreateViewModel model)
+        //{
+        //    string uniqueFileName = null;
+
+        //    if (model.Photo != null)
+        //    {
+
+        //        string uploadsFolder = Path.Combine(webHostEnvironment.WebRootPath, "images");
+
+        //        uniqueFileName = Guid.NewGuid().ToString() + "_" + Path.GetFileName(model.Photo.FileName);
+        //        string filePath = Path.Combine(uploadsFolder, uniqueFileName);
+        //        using (var fileStream = new FileStream(filePath, FileMode.Create)) 
+        //        {
+        //            model.Photo.CopyTo(fileStream);
+        //        }
+        //    }
+
+        //    return uniqueFileName;
+        //}
 
         [HttpPost]
         public IActionResult Create(StaffCreateViewModel model)
