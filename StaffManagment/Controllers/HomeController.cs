@@ -97,22 +97,17 @@ namespace StaffManagment.Controllers
                 staff.Occupation = model.Occupation;
                 if (model.Photo != null)
                 {
-                    staff.PhotoPath = ProcessUploadedFile(model);
+                    if (model.ExistingPhotoPath != null)
+                    {
+                       string filePath = Path.Combine(webHostEnvironment.WebRootPath, "images", model.ExistingPhotoPath);
+                        System.IO.File.Delete(filePath);
+                    }
+                        staff.PhotoPath = ProcessUploadedFile(model);
+                    
                 }
 
-
-                Staff newStaff = new Staff
-                {
-                    Name = model.Name,
-                    Email = model.Email,
-                    Department = model.Department,
-                    Subjects = model.Subjects,
-                    Occupation = model.Occupation,
-                    PhotoPath = uniqueFileName
-                };
-
                 _staffRepository.Update(staff);
-                return RedirectToAction("details", new { id = newStaff.Id });
+                return RedirectToAction("Index");
             }
 
             return View();
