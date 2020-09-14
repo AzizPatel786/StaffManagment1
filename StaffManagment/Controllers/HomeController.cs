@@ -59,6 +59,8 @@ namespace StaffManagment.Controllers
         }
 
         [HttpGet]
+        [Route("[action]")]
+
 
         public ViewResult Create()
         {
@@ -129,12 +131,14 @@ namespace StaffManagment.Controllers
             return uniqueFileName;
         }
 
-        //[HttpGet]
-        //public IActionResult Delete(int id)
-        //{
-        //    _staffRepository.Delete(id);
-        //    return RedirectToAction("Index");
-        //}
+        [HttpGet(Name = "Delete")]
+        [Route("[action]")]
+
+        public IActionResult Delete(int id)
+        {
+            _staffRepository.Delete(id);
+            return RedirectToAction("Index");
+        }
 
         //[HttpPost]
         //[Route("[action]")]
@@ -246,6 +250,8 @@ namespace StaffManagment.Controllers
         //}
 
         [HttpPost]
+        [Route("[action]")]
+
         public IActionResult Create(StaffCreateViewModel model)
         {
             if (ModelState.IsValid)

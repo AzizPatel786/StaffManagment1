@@ -29,9 +29,10 @@
                     {
                         <a asp-controller="home" asp-action="edit" asp-route-id="@Model.Staff.Id"
                            class="btn btn-primary">Edit</a>
-                        <a href="#" class="btn btn-danger">Delete</a>
-                        }
-                    </div>
+                        <a asp-action="Delete" asp-controller="Home"
+                           asp-route-id="@Model.Staff.Id"
+                           class="btnDelete btn btn-danger">Delete</a>}
+                </div>
             </div>
         </div>
     </div>
