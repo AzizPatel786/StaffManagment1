@@ -1,5 +1,5 @@
 ﻿@model IEnumerable<Staff>
-@using Microsoft.AspNetCore.Identity  
+@using Microsoft.AspNetCore.Identity
 @inject SignInManager<ApplicationUser> SignInManager
 
 
@@ -7,14 +7,14 @@
     ViewBag.Title = "Staff List";
 
 }
-    <style>
-        body {
-            background-image: url('images/avondale_college_d_block (1).jpg');
-            background-repeat: no-repeat;
-            background-attachment: fixed;
-            background-size: cover;
-        }
-    </style><div class="card-deck">
+<style>
+    body {
+        background-image: url('images/avondale_college_d_block (1).jpg');
+        background-repeat: no-repeat;
+        background-attachment: fixed;
+        background-size: cover;
+    }
+</style><div class="card-deck">
     @foreach (var staff in Model)
     {
         var photoPath = "~/images/" + (staff.PhotoPath ?? "avatar-512.png");
@@ -31,9 +31,25 @@
                 {
                     <a asp-controller="home" asp-action="edit" asp-route-id="@staff.Id"
                        class="btn btn-primary m-1">Edit</a>
-                    <a asp-action="Delete" asp-controller="Home"
-                       asp-route-id="@staff.Id"
-                       class="btnDelete btn btn-danger">Delete</a>                }
+                    @*<a asp-action="Delete" asp-controller="Home"
+            asp-route-id="@staff.Id"
+            class="btnDelete btn btn-danger">Delete</a>*@
+                    <form  asp-controller="Home"
+            asp-route-id="@staff.Id" asp-action="Delete">
+                        <span id="confirmDeleteSpan_@staff.Id" style="display:none">
+                            <span>Are you sure you want to delete?</span>
+                            <button type="submit" class="btn btn-danger">Yes</button>
+                            <a href="#" class="btn btn-primary"
+                               onclick="confirmDelete('@staff.Id', false)">No</a>
+                        </span>
+
+                        <span id="deleteSpan_@staff.Id">
+                            <a href="#" class="btn btn-danger"
+                               onclick="confirmDelete('@staff.Id', true)">Delete</a>
+                        </span>
+                    </form>
+
+                }
             </div>
         </div>
     }
@@ -45,5 +61,8 @@
         <a href="#" class="btn btn-primary"
            onclick="confirmDelete('@staff.Id', false)">No</a>
     </span>*@
+@section Scripts {
+    <script src="~/js/CustomScript.js"></script>
+}
 
 

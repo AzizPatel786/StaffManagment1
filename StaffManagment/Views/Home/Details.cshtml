@@ -29,9 +29,20 @@
                     {
                         <a asp-controller="home" asp-action="edit" asp-route-id="@Model.Staff.Id"
                            class="btn btn-primary">Edit</a>
-                        <a asp-action="Delete" asp-controller="Home"
-                           asp-route-id="@Model.Staff.Id"
-                           class="btnDelete btn btn-danger">Delete</a>}
+                        <form  asp-controller="Home"
+            asp-route-id="@Model.Staff.Id" asp-action="Delete">
+                        <span id="confirmDeleteSpan_@Model.Staff.Id" style="display:none">
+                            <span>Are you sure you want to delete?</span>
+                            <button type="submit" class="btn btn-danger">Yes</button>
+                            <a href="#" class="btn btn-primary"
+                               onclick="confirmDelete('@Model.Staff.Id', false)">No</a>
+                        </span>
+
+                        <span id="deleteSpan_@Model.Staff.Id">
+                            <a href="#" class="btn btn-danger"
+                               onclick="confirmDelete('@Model.Staff.Id', true)">Delete</a>
+                        </span>
+                    </form>}
                 </div>
             </div>
         </div>

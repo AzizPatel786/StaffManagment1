@@ -287,7 +287,7 @@ public async Task<IActionResult> EditUser(string id)
             return View(model);
         }
         [HttpPost]
-        [Authorize(Policy = "EditUserPolicy")]
+        [Authorize]
 
         public async Task<IActionResult> EditUser(EditUserViewModel model)
         {
