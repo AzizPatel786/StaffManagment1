@@ -27,21 +27,9 @@ namespace StaffManagment.Controllers
         [HttpGet]
         public IActionResult Register()
         {
-            return View();
+            return View(); //return register page view
         }
-        //[AcceptVerbs("Get", "Post")]
-        //public async Task<IActionResult> IsEmailInUse(string email)
-        //{
-        //    var user = await userManager.FindByEmailAsync(email);
-
-        //    if (user == null)
-        //    {
-        //        return Json(true);
-        //    }
-        //    else
-        //    {
-        //        return Json($"Email {email} is already in use.");
-        //    }
+     
         [HttpPost]
         public async Task<IActionResult> Logout()
         {
@@ -167,3 +155,21 @@ namespace StaffManagment.Controllers
     }
 
 }
+
+
+
+
+
+//[AcceptVerbs("Get", "Post")]
+//public async Task<IActionResult> IsEmailInUse(string email)
+//{
+//    var user = await userManager.FindByEmailAsync(email);
+
+//    if (user == null)
+//    {
+//        return Json(true);
+//    }
+//    else
+//    {
+//        return Json($"Email {email} is already in use.");
+//    }

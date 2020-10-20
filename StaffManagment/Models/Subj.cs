@@ -36,7 +36,8 @@ namespace StaffManagment.Models
         Science,
         SocialStudies,
         Spanish,
-        VisualArts
+        VisualArts,
+        Food
         
     }
 }
