@@ -332,11 +332,12 @@ public async Task<IActionResult> EditUser(string id)
         {
             if (ModelState.IsValid)
             {
+                // specifies a unique role name to create a new role
                 IdentityRole identityRole = new IdentityRole
                 {
                     Name = model.RoleName
                 };
-
+                // Saves the role in the underlying AspNetRoles table
                 IdentityResult result = await roleManager.CreateAsync(identityRole);
 
                 if (result.Succeeded)

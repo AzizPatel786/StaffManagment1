@@ -62,6 +62,10 @@ namespace StaffManagment.Controllers
 
                     logger.Log(LogLevel.Warning, confirmationLink);
 
+
+                    // If the user is signed in and in the Admin role, then it is
+                    // the Admin user that is creating a new user. So redirect the
+                    // Admin user to ListRoles action
                     if (signInManager.IsSignedIn(User) && User.IsInRole("Admin"))
                     {
                         return RedirectToAction("ListUsers", "Administration");
