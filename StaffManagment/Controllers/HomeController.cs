@@ -35,19 +35,19 @@ namespace StaffManagment.Controllers
         public ViewResult Index()
         {
             var model = _staffRepository.GetAllStaff();
-            return View(model);
+            return View(model); //Returns all the staff
         }
 
         [Route("[action]/{id?}")]
         public ViewResult Details(int? id)
         {
                         
-            Staff staff = _staffRepository.GetStaff(id.Value);
+            Staff staff = _staffRepository.GetStaff(id.Value); //Retrieves the staff from Database
 
             if (staff == null)
             {
                 Response.StatusCode = 404;
-                return View("StaffNotFound", id.Value);
+                return View("StaffNotFound", id.Value); //if there is no staff on that Id then page will redirect to error page
             }
             HomeDetailsViewModel homeDetailsViewModel = new HomeDetailsViewModel()
             {
@@ -64,7 +64,7 @@ namespace StaffManagment.Controllers
 
         public ViewResult Create()
         {
-            return View();
+            return View(); //Returns Create Page
         }
 
         [HttpGet]
@@ -149,7 +149,7 @@ namespace StaffManagment.Controllers
 
         public IActionResult Delete(int id)
         {
-            _staffRepository.Delete(id);
+            _staffRepository.Delete(id); //Deletes Staff on the database
             return RedirectToAction("Index");
         }
 
@@ -157,7 +157,6 @@ namespace StaffManagment.Controllers
 
         [HttpPost]
         [Route("[action]")]
-
         public IActionResult Create(StaffCreateViewModel model)
         {
             if (ModelState.IsValid)
@@ -171,14 +170,14 @@ namespace StaffManagment.Controllers
                     Department = model.Department,
                     Subjects = model.Subjects,
                     Occupation = model.Occupation,
-                    // Store the file name in PhotoPath property of the employee object
-                    // which gets saved to the Employees database table
+                    // Store the file name in PhotoPath property of the staff object
+                    // which gets saved to the Staffs database table
                     PhotoPath = uniqueFileName
                 };
 
-                _staffRepository.Add(newStaff);
-                return RedirectToAction("details", new { id = newStaff.Id });
-            }
+                _staffRepository.Add(newStaff); //Updates the Database with a new staff
+                return RedirectToAction("details", new { id = newStaff.Id }); //which then redirects the user to the details page
+            }                                                                 //for the user to view the staff 
 
             return View();
         }
