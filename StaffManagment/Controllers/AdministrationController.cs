@@ -104,26 +104,26 @@ namespace StaffManagment.Controllers
 
         }
 
-        [HttpGet]
+        [HttpGet] //Displays all the roles
         public async Task<IActionResult> ManageUserRoles(string userId)
         {
-            ViewBag.userId = userId;
+            ViewBag.userId = userId; //stores the incoming user Id in the viewbag so the view has access to it
 
-            var user = await userManager.FindByIdAsync(userId);
+            var user = await userManager.FindByIdAsync(userId); //Retrievs the user from the database
 
             if (user == null)
             {
                 ViewBag.ErrorMessage = $"User with Id = {userId} cannot be found";
-                return View("NotFound");
+                return View("NotFound"); //If there is no User page will be redirected to the not found page
             }
 
-            var model = new List<UserRolesViewModel>();
+            var model = new List<UserRolesViewModel>(); //Creates a list of user roles
 
             foreach (var role in roleManager.Roles)
             {
                 var userRolesViewModel = new UserRolesViewModel
                 {
-                    RoleId = role.Id,
+                    RoleId = role.Id, //populates role id and name properties
                     RoleName = role.Name
                 };
 
@@ -150,21 +150,22 @@ namespace StaffManagment.Controllers
             if (user == null)
             {
                 ViewBag.ErrorMessage = $"User with Id = {userId} cannot be found";
-                return View("NotFound");
+                return View("NotFound");  //If there is no User page will be redirected to the not found page
+
             }
 
-            var roles = await userManager.GetRolesAsync(user);
-            var result = await userManager.RemoveFromRolesAsync(user, roles);
+            var roles = await userManager.GetRolesAsync(user); //Retrieves all the roles
+            var result = await userManager.RemoveFromRolesAsync(user, roles); //removes all the exsisting roles for whom we select
 
             if (!result.Succeeded)
             {
-                ModelState.AddModelError("", "Cannot remove user existing roles");
+                ModelState.AddModelError("", "Cannot remove user existing roles"); //any error while removing a role
                 return View(model);
             }
 
-            result = await userManager.AddToRolesAsync(user,
-                model.Where(x => x.IsSelected).Select(y => y.RoleName));
-
+            result = await userManager.AddToRolesAsync(user, //adds the selected roles to the user
+                model.Where(x => x.IsSelected).Select(y => y.RoleName)); //gets the list of selected roles
+                                                                   
             if (!result.Succeeded)
             {
                 ModelState.AddModelError("", "Cannot add selected roles to user");
@@ -178,20 +179,20 @@ namespace StaffManagment.Controllers
         //[Authorize(Policy = "DeleteUserPolicy")]
         public async Task<IActionResult> DeleteUser(string id)
         {
-            var user = await userManager.FindByIdAsync(id);
+            var user = await userManager.FindByIdAsync(id); //Finds the Id in the database
 
             if (user == null)
             {
                 ViewBag.ErrorMessage = $"User with Id = {id} cannot be found";
-                return View("NotFound");
+                return View("NotFound"); //If there is no User, page will be redirected to the not found page
             }
             else
             {
-                var result = await userManager.DeleteAsync(user);
+                var result = await userManager.DeleteAsync(user); //Deletes the user in the database
 
                 if (result.Succeeded)
                 {
-                    return RedirectToAction("ListUsers");
+                    return RedirectToAction("ListUsers"); // if successfully deleted then user will be redirected to list user page
                 }
 
                 foreach (var error in result.Errors)
@@ -203,28 +204,27 @@ namespace StaffManagment.Controllers
             }
         }
         [HttpPost]
-        [Authorize(Policy = "DeleteRolePolicy")]
+        [Authorize(Policy = "DeleteRolePolicy")] //user must be assigned delete role claim
         public async Task<IActionResult> DeleteRole(string id)
         {
-            var role = await roleManager.FindByIdAsync(id);
+            var role = await roleManager.FindByIdAsync(id); //Finds the Id in the database
 
             if (role == null)
             {
                 ViewBag.ErrorMessage = $"Role with Id = {id} cannot be found";
-                return View("NotFound");
+                return View("NotFound");  //If there is no User, page will be redirected to the not found page
             }
             else
             {
-                // Wrap the code in a try/catch block
                 try
                 {
-                    //throw new Exception("Test Exception");
+                   
 
-                    var result = await roleManager.DeleteAsync(role);
+                    var result = await roleManager.DeleteAsync(role);  //Deletes the role in the database
 
                     if (result.Succeeded)
                     {
-                        return RedirectToAction("ListRoles");
+                        return RedirectToAction("ListRoles"); // if successfully deleted then user will be redirected to list user page
                     }
 
                     foreach (var error in result.Errors)
@@ -245,20 +245,23 @@ namespace StaffManagment.Controllers
                     // the user using ViewBag. The Error view retrieves this data
                     // from the ViewBag and displays to the user.
                     ViewBag.ErrorTitle = $"{role.Name} role is in use";
-                    ViewBag.ErrorMessage = $"{role.Name} role cannot be deleted as there are users in this role. If you want to delete this role, please remove the users from the role and then try to delete";
+                    ViewBag.ErrorMessage = $"{role.Name} role cannot be deleted as there are users in this role. " +
+                        $"If you want to delete this role, please remove the users from the role and then try to delete";
                     return View("Error");
                 }
             }
         }
 
-        [Authorize(Roles = "Admin")]
+        [Authorize(Roles = "Admin")] //displays only if user is in admin role
         [HttpGet]
         public IActionResult ListUsers()
         {
             var users = userManager.Users;
-            return View(users);
+            return View(users); //displays all the registered users
         }
         [Authorize]
+        
+        
         [HttpGet]
 public async Task<IActionResult> EditUser(string id)
         {
@@ -286,28 +289,29 @@ public async Task<IActionResult> EditUser(string id)
 
             return View(model);
         }
+        
+        
         [HttpPost]
         [Authorize]
-
         public async Task<IActionResult> EditUser(EditUserViewModel model)
         {
-            var user = await userManager.FindByIdAsync(model.Id);
+            var user = await userManager.FindByIdAsync(model.Id);//Finds the Id in the database
 
             if (user == null)
             {
                 ViewBag.ErrorMessage = $"User with Id = {model.Id} cannot be found";
-                return View("NotFound");
+                return View("NotFound");  //If there is no User, page will be redirected to the not found page
             }
             else
             {
                 user.Email = model.Email;
                 user.UserName = model.UserName;
 
-                var result = await userManager.UpdateAsync(user);
+                var result = await userManager.UpdateAsync(user);  //Updates the user in the database
 
                 if (result.Succeeded)
                 {
-                    return RedirectToAction("ListUsers");
+                    return RedirectToAction("ListUsers"); //if successfully updated, user will be redirected to ListUsers page 
                 }
 
                 foreach (var error in result.Errors)
@@ -323,7 +327,7 @@ public async Task<IActionResult> EditUser(string id)
         [HttpGet]
         public IActionResult CreateRole()
         {
-            return View();
+            return View(); //Return CreatRole page
         }
 
         [HttpPost]
@@ -358,18 +362,19 @@ public async Task<IActionResult> EditUser(string id)
         public IActionResult ListRoles()
         {
             var roles = roleManager.Roles;
-            return View(roles);
+            return View(roles); //Lists all the roles
         }
+
         [Authorize]
         [HttpGet]
         public async Task<IActionResult> EditRole(string id)
         {
-            var role = await roleManager.FindByIdAsync(id);
+            var role = await roleManager.FindByIdAsync(id); //Finds the Id in the database
 
             if (role == null)
             {
                 ViewBag.ErrorMessage = $"Role with Id = {id} cannot be found";
-                return View("NotFound");
+                return View("NotFound");  //If there is no User, page will be redirected to the not found page
             }
 
             var model = new EditRoleViewModel
@@ -382,7 +387,7 @@ public async Task<IActionResult> EditUser(string id)
             {
                 if (await userManager.IsInRoleAsync(user, role.Name))
                 {
-                    model.Users.Add(user.UserName);
+                    model.Users.Add(user.UserName);   
                 }
             }
 
@@ -405,7 +410,7 @@ public async Task<IActionResult> EditUser(string id)
             {
                 role.Name = model.RoleName;
 
-                var result = await roleManager.UpdateAsync(role);
+                var result = await roleManager.UpdateAsync(role); //Updates the role in the database
 
                 if (result.Succeeded)
                 {
@@ -425,7 +430,6 @@ public async Task<IActionResult> EditUser(string id)
         public async Task<IActionResult> EditUsersInRole(string roleId)
         {
             ViewBag.roleId = roleId;
-
             var role = await roleManager.FindByIdAsync(roleId);
 
             if (role == null)
@@ -433,9 +437,7 @@ public async Task<IActionResult> EditUser(string id)
                 ViewBag.ErrorMessage = $"Role with Id = {roleId} cannot be found";
                 return View("NotFound");
             }
-
             var model = new List<UserRoleViewModel>();
-
             foreach (var user in userManager.Users)
             {
                 var userRoleViewModel = new UserRoleViewModel
@@ -462,19 +464,15 @@ public async Task<IActionResult> EditUser(string id)
         public async Task<IActionResult> EditUsersInRole(List<UserRoleViewModel> model, string roleId)
         {
             var role = await roleManager.FindByIdAsync(roleId);
-
             if (role == null)
             {
                 ViewBag.ErrorMessage = $"Role with Id = {roleId} cannot be found";
                 return View("NotFound");
             }
-
             for (int i = 0; i < model.Count; i++)
             {
                 var user = await userManager.FindByIdAsync(model[i].UserId);
-
                 IdentityResult result = null;
-
                 if (model[i].IsSelected && !(await userManager.IsInRoleAsync(user, role.Name)))
                 {
                     result = await userManager.AddToRoleAsync(user, role.Name);
@@ -487,7 +485,6 @@ public async Task<IActionResult> EditUser(string id)
                 {
                     continue;
                 }
-
                 if (result.Succeeded)
                 {
                     if (i < (model.Count - 1))
@@ -496,7 +493,6 @@ public async Task<IActionResult> EditUser(string id)
                         return RedirectToAction("EditRole", new { Id = roleId });
                 }
             }
-
             return RedirectToAction("EditRole", new { Id = roleId });
         }
     }
