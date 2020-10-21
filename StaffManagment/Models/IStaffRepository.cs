@@ -12,5 +12,5 @@ namespace StaffManagment.Models
         Staff Add(Staff staff);
         Staff Update(Staff staffChanges);
         Staff Delete(int id);
-    }
+    }         //Functions for the staff
 }

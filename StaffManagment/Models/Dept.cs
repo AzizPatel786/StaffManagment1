@@ -13,6 +13,6 @@ namespace StaffManagment.Models
         Science,
         SocialScience,
         Languages,
-        Esol
+        Esol  //These are the options for the Department dropdownbox
     }
 }

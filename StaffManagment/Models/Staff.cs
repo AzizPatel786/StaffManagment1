@@ -23,6 +23,6 @@ namespace StaffManagment.Models
         [Required]
         public Occu? Occupation { get; set; }
         public string PhotoPath { get; set; }
-
+        //Requirements when creating a staff
     }
 }

@@ -38,6 +38,6 @@ namespace StaffManagment.Models
         Spanish,
         VisualArts,
         Food
-        
+        //These are the options for the Occupation dropdownbox
     }
 }

@@ -1,4 +1,4 @@
-﻿@model IEnumerable<Staff>
+﻿@model IEnumerable<Staff> //this inherits the method from staff.cs
 @using Microsoft.AspNetCore.Identity
 @inject SignInManager<ApplicationUser> SignInManager
 
@@ -15,9 +15,9 @@
         background-size: cover;
     }
 </style><div class="card-deck">
-    @foreach (var staff in Model)
+    @foreach (var staff in Model)  //loops through each staff object in the model
     {
-        var photoPath = "~/images/" + (staff.PhotoPath ?? "avatar-512.png");
+        var photoPath = "~/images/" + (staff.PhotoPath ?? "avatar-512.png"); //if no profile pic is select then the default picture will be used
 
         <div class="card m-3" style="min-width: 18rem; max-width:30.5%;">
             <div class="card-header">
@@ -27,15 +27,13 @@
                  asp-append-version="true" />
             <div class="card-footer text-center">
                 <a href="/home/details/@staff.Id" class="btn btn-primary m-1">View</a>
-                @if (User.IsInRole("Admin"))
+                @if (User.IsInRole("Admin")) //this part only gets shown if user is in admin role
                 {
                     <a asp-controller="home" asp-action="edit" asp-route-id="@staff.Id"
                        class="btn btn-primary m-1">Edit</a>
-                    @*<a asp-action="Delete" asp-controller="Home"
-            asp-route-id="@staff.Id"
-            class="btnDelete btn btn-danger">Delete</a>*@
-                    <form  asp-controller="Home"
-            asp-route-id="@staff.Id" asp-action="Delete">
+
+                    <form asp-controller="Home"
+                          asp-route-id="@staff.Id" asp-action="Delete">
                         <span id="confirmDeleteSpan_@staff.Id" style="display:none">
                             <span>Are you sure you want to delete?</span>
                             <button type="submit" class="btn btn-danger">Yes</button>
@@ -55,14 +53,19 @@
     }
 </div>
 
+@section Scripts {
+    <script src="~/js/CustomScript.js"></script>
+}
+
+
+@*<a asp-action="Delete" asp-controller="Home"
+    asp-route-id="@staff.Id"
+    class="btnDelete btn btn-danger">Delete</a>*@
+
+
 @*<span id="confirmDeleteSpan_@staff.Id" style="display:none">
         <span>Are you sure you want to delete?</span>
         <button type="submit" class="btn btn-danger">Yes</button>
         <a href="#" class="btn btn-primary"
            onclick="confirmDelete('@staff.Id', false)">No</a>
     </span>*@
-@section Scripts {
-    <script src="~/js/CustomScript.js"></script>
-}
-
-

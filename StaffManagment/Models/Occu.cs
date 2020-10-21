@@ -9,6 +9,6 @@ namespace StaffManagment.Models
     {
         Receptionist,
         Teacher,
-        Student
-    }
+        Student  //These are the options for the Occupation dropdownbox
+    } 
 }

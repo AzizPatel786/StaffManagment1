@@ -22,8 +22,8 @@ namespace StaffManagment.Models
 
         public Staff Add(Staff staff)
         {
-           staff.Id = _staffList.Max(e => e.Id) + 1;
-            _staffList.Add(staff);
+           staff.Id = _staffList.Max(e => e.Id) + 1; //Increases the previous staff Id by an increment of 1
+            _staffList.Add(staff); //Adds a staff in the database
             return staff;
         }
 
@@ -32,14 +32,14 @@ namespace StaffManagment.Models
             Staff staff = _staffList.FirstOrDefault(e => e.Id == id);
             if (staff != null)
             {
-                _staffList.Remove(staff);
+                _staffList.Remove(staff); //Removes staff from DB
             }
             return staff;
         }
 
         public IEnumerable<Staff> GetAllStaff()
         {
-            return _staffList;
+            return _staffList; //Returns all the staff from the DB
         }
 
         public Staff GetStaff(int Id)
