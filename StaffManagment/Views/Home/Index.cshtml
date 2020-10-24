@@ -1,12 +1,31 @@
-﻿@model IEnumerable<Staff> //this inherits the method from staff.cs
+﻿@model IEnumerable<Staff>
 @using Microsoft.AspNetCore.Identity
 @inject SignInManager<ApplicationUser> SignInManager
-
-
+@*this inherits the method from staff.cs*@
 @{
     ViewBag.Title = "Staff List";
 
 }
+
+    @*<html>
+    <head>
+        <meta http-equiv="content-type" content="text/html; charset=UTF-8" />
+        <script src="jquery-2.1.4.js"></script>
+        <link rel="stylesheet" type="text/css" href="styles.css" />
+    </head>
+    <body>
+        <div class="loader-wrapper">
+            <span class="loader"><span class="loader-inner"></span></span>
+        </div>
+        <script>
+        $(window).on("load",function(){
+          $(".loader-wrapper").fadeOut("slow");
+        });
+        </script>
+    </body>
+    </html>*@
+    
+
 <style>
     body {
         background-image: url('images/avondale_college_d_block (1).jpg');
@@ -14,7 +33,13 @@
         background-attachment: fixed;
         background-size: cover;
     }
-</style><div class="card-deck">
+</style>@*<div id="loader-wrapper">
+    <div id="loader"></div>
+
+    <div class="loader-section section-left"></div>
+    <div class="loader-section section-right"></div>
+
+</div>*@<div class="card-deck">
     @foreach (var staff in Model)  //loops through each staff object in the model
     {
         var photoPath = "~/images/" + (staff.PhotoPath ?? "avatar-512.png"); //if no profile pic is select then the default picture will be used
