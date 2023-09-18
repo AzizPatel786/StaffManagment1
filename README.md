@@ -7,3 +7,7 @@ Instructions For Opening Application
 5)	Now you will need to update the database with the migration you added, for that type “Update-Database”
 6)	Now the database should be successfully saved on the local database
 7)	Database is called “StaffDB” containing a total of 9 tables
+
+Project Documentatin Link:
+
+https://uoa-my.sharepoint.com/:w:/g/personal/mpat308_uoa_auckland_ac_nz/EZyUZfBItA1AihkdNN1T_2sByVWnVZsvDFvA02zya40i_g?e=j9IKpS
